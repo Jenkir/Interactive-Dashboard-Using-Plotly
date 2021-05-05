@@ -17,10 +17,11 @@ var gaugeChart = d3.select("#gauge");
 //Create function to initially populate dropdown menu with IDs, 
 //draw charts by default using first ID
 function init() {
+
 //     //reset any previous data
-       resetData();
+    resetData();
     //Use d3 library to read in `samples.json`
-    d3.json("data/samples.json", then(data => {
+    d3.json("data/samples.json").then((data => {
         
         //-------------------------------
         //Populate dropdown menu with IDs
@@ -29,15 +30,15 @@ function init() {
         data.names.forEach((name => {
             var option = idSelect.append("option");
             option.text(name);
-        })) //close forEach
+        })); //close forEach
 
         //Retrieve first ID from the list for initial charts - as default
-        var initID = idSelect.property("value");
+        var initId = idSelect.property("value");
 
         //Plot charts using initial ID
-        plotCharts(initID);
+        plotCharts(initId);
     })); // Close the .then() 
-} //Close the init() function
+}; //Close the init() function
  
 // Create function to reset the divs (to prepare for new data)
 function resetData() {
