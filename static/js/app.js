@@ -66,7 +66,7 @@ function plotCharts(id) {
         var wfreq = individualMetadata.wfreq;
 
         //Iterate through each key and value in the metadata
-        Object.entries(individualMetadata).forEach([key, value]) => {
+        Object.entries(individualMetadata).forEach(([key, value]) => {
 
             var newList = demographicsTable.append("ul");
             //.list-group-flush "removes borders and rounded corners to render list
@@ -83,7 +83,7 @@ function plotCharts(id) {
             listItem.text(`${key}: ${value}`);
 
         //Close forEach
-        };
+        });
 
         //--------------------------------------------
         //Retrieve data for Plotting the Charts
@@ -98,7 +98,7 @@ function plotCharts(id) {
         var sampleValues = [];
 
         //Iterate through each key and value in the sample (to retrieve data for plotting)
-        Object.entries(individualSample).forEach([key,value]) => {
+        Object.entries(individualSample).forEach(([key,value]) => {
 
             switch (key) {
                 // otu_ids is for x values
@@ -158,7 +158,7 @@ function plotCharts(id) {
                 }
             },
             title: {
-                text: `<b> Top OTUs for Test Subject ${id}</b>`;
+                text: `<b> Top OTUs for Test Subject ${id}</b>`,
                 font: {
                     size:18,
                     color: 'rgb(34, 94,168)'
@@ -184,5 +184,59 @@ function plotCharts(id) {
         // Start by creating trace
         var traceBub = {
             x: otuIds[0],
-            y: sampleValues[0]
-        }
+            y: sampleValues[0],
+            text: otuLabels[0],
+            mode: 'markers',
+            marker: {
+                size: sampleValues[0],
+                color: otuIds[0],
+                colorscale: 'Y1GnBu'
+            }
+        };
+
+        //Create data array for plotting
+        var dataBub = [traceBub];
+
+        //Define the plot layout
+        var layoutBub = {
+            font: {
+                family: 'Quicksand'
+            },
+            hoverlabel: {
+                font:{
+                    family:'Quicksand'
+                }
+            },
+            xaxis: {
+                title: "<b>OTU Id</b>",
+                color: 'rgb(34,94,168)'
+            },
+            yaxis: {
+                title: "<b>Sample Values</b>",
+                color: 'rgb(34,94,168)'
+            },
+            showlegend: false,
+        };
+
+        //Plot the bubble chart using appropriate div
+        Plotly.newPlot('bubble', dataBub, layoutBub);
+
+    
+    
+
+    })); //Close the .then function
+}; //Close the plotCharts() function
+
+//When there is a change in the dropdown menu, 
+//this function is called with ID as a parameter
+function optionChanged(id) {
+
+    //Reset the data
+    resetData();
+
+    //Plot the charts for this id
+    plotCharts(id);
+}  //Close the optionChanged function
+
+// Call the init() function for default data
+init();
